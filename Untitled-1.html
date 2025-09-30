@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iksha — Special for You 💖</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #ffd1dc, #ffe6f0);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  /* Floating hearts animation */
+  .heart {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #ff4d6d;
+    transform: rotate(45deg);
+    animation: float 7s linear infinite;
+    opacity: 0.8;
+  }
+  .heart::before,
+  .heart::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #ff4d6d;
+    border-radius: 50%;
+  }
+  .heart::before { top: -10px; left: 0; }
+  .heart::after { left: 10px; top: 0; }
+
+  @keyframes float {
+    0% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-100vh) rotate(45deg); opacity: 0; }
+  }
+
+  .frame {
+    background: rgba(255,255,255,0.9);
+    padding: 30px;
+    border-radius: 25px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    max-width: 400px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+
+  .photo-wrap img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #ff4d6d;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3em;
+    color: #ff4d6d;
+    margin: 0 0 10px 0;
+  }
+
+  .subtitle {
+    font-size: 1.2em;
+    color: #ff1a75;
+    margin-bottom: 20px;
+  }
+
+  .typing-box {
+    min-height: 60px;
+    margin-bottom: 20px;
+  }
+
+  .typing {
+    font-size: 1.1em;
+    color: #ff4d6d;
+  }
+
+  .small {
+    font-size: 0.9em;
+    color: #ff99b3;
+  }
+
+  .btn {
+    background: linear-gradient(135deg, #ff6699, #ff3366);
+    border: none;
+    padding: 12px 25px;
+    color: white;
+    font-size: 1.1em;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255,0,102,0.4);
+  }
+  .btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(255,0,102,0.6);
+  }
+
+  /* Background stickers */
+  .sticker {
+    position: absolute;
+    font-family: 'Pacifico', cursive;
+    font-size: 2.5em;
+    color: rgba(255, 77, 109, 0.2);
+    animation: floatSticker 20s linear infinite;
+  }
+
+  @keyframes floatSticker {
+    0% { transform: translateY(100vh) rotate(-10deg); }
+    100% { transform: translateY(-100vh) rotate(10deg); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating hearts -->
+<script>
+  for(let i=0; i<20; i++){
+    let heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.style.left = Math.random()*100 + 'vw';
+    heart.style.animationDuration = (5 + Math.random()*5) + 's';
+    heart.style.width = heart.style.height = (10 + Math.random()*20) + 'px';
+    document.body.appendChild(heart);
+  }
+
+  // Stickers
+  const names = ['Vansh ❤ Iksha','Iksha ❤ Vansh','Vansh & Iksha'];
+  for(let i=0; i<5; i++){
+    let sticker = document.createElement('div');
+    sticker.className = 'sticker';
+    sticker.innerText = names[i % names.length];
+    sticker.style.left = Math.random()*80 + 'vw';
+    sticker.style.top = Math.random()*100 + 'vh';
+    sticker.style.fontSize = (30 + Math.random()*30) + 'px';
+    document.body.appendChild(sticker);
+  }
+</script>
+
+<div class="frame">
+  <div class="photo-wrap">
+    <!-- Add your photo filename here -->
+    <img id="profilePhoto" src="iksha.jpg" alt="Iksha Photo">
+  </div>
+
+  <h1>Iksha ❤</h1>
+  <p class="subtitle">A small surprise just for you — click below and feel it ♥</p>
+
+  <div class="typing-box">
+    <div class="typing" id="typingText"></div>
+    <div class="small" id="smallText">Click on "Play" to start the song.</div>
+  </div>
+
+  <button id="playBtn" class="btn">Play ❤🎵</button>
+  <audio id="song" src="song.mp3" preload="auto"></audio>
+</div>
+
+<script>
+const playBtn = document.getElementById("playBtn");
+const song = document.getElementById("song");
+const typingText = document.getElementById("typingText");
+const smallText = document.getElementById("smallText");
+
+const messages = [
+  "Hey Iksha 💖, you make my world brighter!",
+  "I can't stop thinking about you ❤",
+  "Every moment with you is magical ✨",
+  "Iksha, you are my happiness 🌸",
+  "Vansh loves you forever 💕"
+];
+
+let msgIndex = 0;
+
+function typeMessage(message){
+  typingText.innerHTML = '';
+  let index = 0;
+  const interval = setInterval(() => {
+    typingText.innerHTML += message[index];
+    index++;
+    if(index === message.length) clearInterval(interval);
+  }, 80);
+}
+
+// Function to cycle messages every 5 seconds
+function startTypingCycle(){
+  typeMessage(messages[msgIndex]);
+  setInterval(() => {
+    msgIndex = (msgIndex + 1) % messages.length;
+    typeMessage(messages[msgIndex]);
+  }, 5000);
+}
+
+playBtn.addEventListener("click", ()=>{
+  song.play();
+  smallText.style.display = 'none';
+  startTypingCycle();
+});
+</script>
+
+</body>
+</html>
